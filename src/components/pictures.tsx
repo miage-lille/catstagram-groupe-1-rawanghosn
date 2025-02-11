@@ -29,8 +29,18 @@ const Pictures = () => {
   const dispatch = useDispatch();
 
   if (pictures.status === 'loading') {
-    return <div>Loading...</div>;
-  }
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '10vh',
+        fontSize: '1.5rem'
+      }}>
+        Loading...
+      </div>
+    );
+      }
 
   if (pictures.status === 'failure') {
     return <div>Error: {pictures.error}</div>;

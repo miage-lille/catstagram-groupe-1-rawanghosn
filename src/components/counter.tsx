@@ -35,19 +35,18 @@ const DisplayCounter = styled.span`
   color: darkgrey;
 `;
 
-// Exercice 1
 const Counter = () => {
   const counter = useSelector(counterSelector);
   const dispatch = useDispatch();
 
   const handleIncrement = () => {
-    dispatch(increment());  // Increment the counter
-    dispatch(fetchCatsRequest(counter + 1));  // Trigger the API request with updated counter
+    dispatch(increment());  
+    dispatch(fetchCatsRequest(counter + 1));  
   };
 
   const handleDecrement = () => {
-    dispatch(decrement());  // Decrement the counter
-    dispatch(fetchCatsRequest(counter - 1));  // Trigger the API request with updated counter
+    dispatch(decrement());  
+    dispatch(fetchCatsRequest(counter - 1));
   };
 
   return (

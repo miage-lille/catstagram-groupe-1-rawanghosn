@@ -15,7 +15,6 @@ export const failure = (error: string): Failure => ({
 
 export const parseResponse = (response: Response): Promise<Picture[]> => {
   return response.json().then((data) => {
-    // On mappe chaque hit dans un objet Picture
     const pictures = data.hits.map((hit: any): Picture => {
       return {
         id: hit.id, 

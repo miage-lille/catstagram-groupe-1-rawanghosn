@@ -7,6 +7,7 @@ import { ApiState, Loading } from './types/api.type';
 import { loading, success, failure } from './api';
 import { fetchCatsCommit, fetchCatsRequest } from './actions';
 import { Picture } from './types/picture.type';
+import { fetchCats } from './commands';
 
 // State
 export type State = {
@@ -19,8 +20,8 @@ export type State = {
 
 // State par défaut
 export const defaultState: State = {
-  counter: 0,
-  pictures: { status: 'success', data: [] },
+  counter: 3,
+  pictures: loading(),
   pictureSelected: none,
   loading: false,
   error: null,
@@ -34,27 +35,26 @@ export const reducer = (state: State | undefined, action: Actions): State | Loop
       const newCounter = state.counter + 1;
       return loop(
         { ...state, counter: newCounter, pictures: loading() },
-        Cmd.action(fetchCatsRequest(newCounter))
+        fetchCats(newCounter) 
       );
     }
     case 'DECREMENT': {
       const newCounter = Math.max(3, state.counter - 1);
       return loop(
         { ...state, counter: newCounter, pictures: loading() },
-        Cmd.action(fetchCatsRequest(newCounter))
+        fetchCats(newCounter)
       );
     }
-    case 'FETCH_CATS_REQUEST':
-      return { ...state, pictures: loading() };
-
     case 'FETCH_CATS_COMMIT':
       return { ...state, pictures: action.payload };
-
+    
     case 'FETCH_CATS_ROLLBACK':
       return loop(
         { ...state, pictures: failure(action.error.message) },
         Cmd.run(() => console.error(action.error.message))
       );
+    case 'FETCH_CATS_REQUEST':
+      return { ...state, pictures: loading() };
 
     case 'SELECT_PICTURE':
       return { ...state, pictureSelected: some(action.picture) };
@@ -67,7 +67,6 @@ export const reducer = (state: State | undefined, action: Actions): State | Loop
   }
 };
 
-// Selecteurs
 export const counterSelector = (state: State) => state.counter;
 export const picturesSelector = (state: State) => state.pictures;
 export const getSelectedPicture = (state: State) => state.pictureSelected;
