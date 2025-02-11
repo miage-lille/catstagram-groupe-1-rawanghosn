@@ -3,16 +3,14 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 
 const Container = styled.div`
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 50px; /* Location of the box */
+  position: fixed; 
+  z-index: 1;
+  padding-top: 50px;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+  width: 100%; 
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9); 
 `;
 
 const Button = styled.button`
