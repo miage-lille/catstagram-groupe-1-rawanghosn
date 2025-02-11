@@ -1,21 +1,25 @@
 import { Cmd } from 'redux-loop';
-import { fetchCatsCommit, fetchCatsRollback } from './actions';
-import { FetchCatsRequest } from './types/actions.type';
-
-export const cmdFetch = (action: FetchCatsRequest) =>
-  Cmd.run(
-    () => {
-      return fetch(action.path, {
-        method: action.method,
-      }).then(checkStatus);
-    },
-    {
-      successActionCreator: fetchCatsCommit, // (equals to (payload) => fetchCatsCommit(payload))
-      failActionCreator: fetchCatsRollback, // (equals to (error) => fetchCatsCommit(error))
-    },
-  );
-
-const checkStatus = (response: Response) => {
-  if (response.ok) return response;
-  throw new Error(response.statusText);
+import { parseResponse } from './api';
+import { fetchCatsRequest, fetchCatsCommit, fetchCatsRollback } from './actions';
+export const fetchCats = (counter: number) => {
+  return Cmd.run(async () => {
+    try {
+      const response = await fetch(
+        `https://pixabay.com/api/?key=48759792-4bf55c0efb566aa37a62fbce0&per_page=${counter}&q=cat`
+      );
+      const pictures = await parseResponse(response);
+      console.log("API Response:", pictures); 
+      return fetchCatsCommit(pictures);  
+    } catch (error: unknown) {
+      console.error("API Error:", error); 
+      if (error instanceof Error) {
+        return fetchCatsRollback(error);  
+      }
+      return fetchCatsRollback(new Error('An unknown error occurred'));
+    }
+  }, {
+    successActionCreator: (value: any) => value,
+    failActionCreator: (error: Error) => fetchCatsRollback(error),
+  });
 };
+
